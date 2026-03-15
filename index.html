@@ -3,69 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Premium Ram Jap Counter</title>
+    <title>Ram Jap - Global Mahayagya</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-
     <div class="bg-animation"></div>
 
     <header class="glass-header">
         <button id="menuBtn"><i class="fas fa-bars"></i></button>
         <h1 style="font-family: 'Yatra One', cursive; color: #ff9900;">🕉️ श्री राम</h1>
         <div style="display: flex; gap: 10px; align-items: center;">
-            <img id="userPhoto" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width: 30px; height: 30px; border-radius: 50%; display: none; border: 1px solid gold;">
+            <img id="userPhoto" src="" style="width: 32px; height: 32px; border-radius: 50%; display: none; border: 2px solid gold;">
             <button id="bgMusicBtn"><i class="fas fa-music"></i></button>
-            <button id="soundToggle"><i class="fas fa-volume-up"></i></button>
         </div>
     </header>
 
     <nav class="sidebar glass-panel" id="menu">
-        <div id="authSection" style="padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <button id="loginBtn" style="background: white; color: #444; border: none; padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%;">
-                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" style="width: 15px; vertical-align: middle; margin-right: 10px;"> Sign in with Google
-            </button>
-            <p id="welcomeText" style="display: none; font-size: 14px; margin-top: 10px;">जय श्री राम, <span id="displayName"></span>!</p>
+        <div id="authSection" style="padding: 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <div id="loginOptions">
+                <button id="loginBtn" style="background:white; color:black; border:none; padding:8px; border-radius:5px; width:100%; font-weight:bold; margin-bottom:10px;">Google Login</button>
+                <input type="text" id="guestNameInput" placeholder="अपना नाम लिखें" style="width:100%; padding:8px; border-radius:5px; border:none; margin-bottom:5px; background:rgba(255,255,255,0.1); color:white;">
+                <button id="guestLoginBtn" style="background:#ff9900; color:white; border:none; padding:8px; border-radius:5px; width:100%;">प्रवेश करें</button>
+            </div>
+            <div id="welcomeText" style="display:none;">
+                <p style="color:gold;">जय श्री राम, <span id="displayName"></span>!</p>
+                <span id="userBadge" class="badge">Shravak</span>
+            </div>
+        </div>
+        
+        <button data-page="counter"><i class="fas fa-om"></i> Jap Counter</button>
+        <button data-page="leaderboard"><i class="fas fa-trophy"></i> Leaderboard</button>
+        
+        <div style="padding:15px; border-top:1px solid rgba(255,255,255,0.1);">
+            <p style="font-size:12px; margin-bottom:10px;">Choose Theme:</p>
+            <div style="display:flex; gap:10px;">
+                <div class="theme-dot" onclick="setTheme('classic')" style="background:#ff9900; width:25px; height:25px; border-radius:50%; border:2px solid white;"></div>
+                <div class="theme-dot" onclick="setTheme('blue')" style="background:#e94560; width:25px; height:25px; border-radius:50%;"></div>
+                <div class="theme-dot" onclick="setTheme('gold')" style="background:#ffd700; width:25px; height:25px; border-radius:50%;"></div>
+            </div>
         </div>
 
-        <button data-page="counter"><i class="fas fa-om"></i> Jap Counter</button>
-        <button data-page="stats"><i class="fas fa-chart-bar"></i> Stats</button>
-        <button data-page="leaderboard"><i class="fas fa-trophy"></i> Live Leaderboard</button>
-        <button id="resetBtn"><i class="fas fa-sync-alt"></i> Reset All</button>
+        <button id="shareBtn"><i class="fab fa-whatsapp"></i> WhatsApp Share</button>
+        <button id="resetBtn" style="color:#ff4444;"><i class="fas fa-trash"></i> Reset Data</button>
     </nav>
 
     <main class="main">
         <section id="counterPage" class="page active glass-panel">
+            <div id="chaupaiBox" style="font-style:italic; font-size:13px; color:#ffcc00; margin-bottom:15px; min-height:40px;">
+                "मंगल भवन अमंगल हारी, द्रवहु सुदसरथ अजिर बिहारी"
+            </div>
+
+            <div class="live-status"><i class="fas fa-circle" style="color:#00ff88; font-size:8px;"></i> <span id="liveUsers">108</span> Bhakt Online</div>
+            
             <div class="mala-container">
                 <div class="mala" id="mala"></div>
                 <button class="jap-btn" id="japBtn">राम</button>
             </div>
-            <div class="progress-container"><div class="progress-bar" id="bar"></div></div>
-            <p class="mala-count">Mala Completed: <span id="malaCount">0</span></p>
-            <div class="statsBox">
-                <div class="stat-item"><span>Today</span><strong id="today">0</strong></div>
-                <div class="stat-item"><span>Total</span><strong id="total">0</strong></div>
-            </div>
-        </section>
 
-        <section id="statsPage" class="page glass-panel">
-            <h2>📊 Your Devotion</h2>
-            <div class="big-stat"><p>Lifetime Jap</p><h1 id="totalStat" style="color: gold;">0</h1></div>
-            <div class="big-stat"><p>Today's Jap</p><h2 id="todayStat" style="color: #ff7b00;">0</h2></div>
+            <div class="stats-grid">
+                <div class="stat-card"><span>आज का जप</span><h3 id="today">0</h3></div>
+                <div class="stat-card"><span>माला</span><h3 id="malaCount">0</h3></div>
+                <div class="stat-card"><span>कुल जप</span><h3 id="total">0</h3></div>
+            </div>
+            <div class="progress-container" style="margin-top:20px; height:6px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden;">
+                <div class="progress-bar" id="bar" style="height:100%; background:var(--primary); width:0%; transition:0.3s;"></div>
+            </div>
         </section>
 
         <section id="leaderboardPage" class="page glass-panel">
-            <div class="big-stat" style="margin-top: 0; padding: 15px;">
-                <p>🌍 Global Maha-Jap</p>
-                <h1 id="globalTotal" style="color: #00ff88; font-size: 32px;">0+</h1>
+            <div class="global-card" style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px;">
+                <p>🚩 Global Maha-Jap Counter</p>
+                <h1 id="globalTotal" style="color:#00ff88; font-size:36px;">0</h1>
             </div>
-            <h2>🏆 Top 10 Devotees</h2>
-            <div id="leaderboardList" style="text-align: left; max-height: 250px; overflow-y: auto;"></div>
+            <h3>🏆 Top 10 Bhakt</h3>
+            <div id="leaderboardList" style="margin-top:15px;"></div>
         </section>
     </main>
 
-    <footer class="glass-footer">Created with ❤️ by Ritik Tiwari | 📺 @ekanokhasafar</footer>
+    <footer style="text-align:center; font-size:10px; opacity:0.6; padding:10px;">Created by Ritik Tiwari | @ekanokhasafar</footer>
 
     <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore-compat.js"></script>
