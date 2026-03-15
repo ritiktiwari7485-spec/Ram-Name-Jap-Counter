@@ -21,3 +21,4 @@ body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 .leader-item { display: flex; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 12px; margin-bottom: 8px; }
 .page { display: none; }
 .page.active { display: block; }
+.footer-credit { text-align: center; font-size: 11px; opacity: 0.6; padding: 15px; border-top: 1px solid rgba(255,255,255,0.05); }
