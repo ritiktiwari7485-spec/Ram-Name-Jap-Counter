@@ -9,7 +9,7 @@ let today = parseInt(localStorage.getItem("today")) || 0;
 let isMuted = false;
 let curV = "राम";
 
-// Mala setup
+// Mala initialization
 const mala = document.getElementById("mala");
 const beads = [];
 for(let i=0; i<108; i++) {
@@ -28,7 +28,7 @@ function upUI() {
     let curr = total % 108;
     beads.forEach((b, i) => { b.classList.remove("active"); if(i < curr) b.classList.add("active"); });
     
-    // Achievements
+    // Badges Update
     if(total >= 108) document.getElementById("b1").classList.add("unlocked");
     if(total >= 1008) document.getElementById("b2").classList.add("unlocked");
     if(total >= 5000) document.getElementById("b3").classList.add("unlocked");
@@ -41,7 +41,7 @@ document.getElementById("jBtn").onclick = () => {
     if(!isMuted) {
         window.speechSynthesis.cancel();
         let u = new SpeechSynthesisUtterance(curV);
-        u.lang = 'hi-IN'; u.rate = 1.6;
+        u.lang = 'hi-IN'; u.rate = 1.7;
         window.speechSynthesis.speak(u);
     }
     if(total % 108 === 0) confetti();
@@ -57,21 +57,22 @@ window.stM = (m, v, el) => {
     curV = v;
 };
 
-// Menu & Pages
-document.getElementById("mBtn").onclick = (e) => { e.stopPropagation(); document.getElementById("side").classList.add("open"); };
-document.body.onclick = () => document.getElementById("side").classList.remove("open");
-document.getElementById("side").onclick = (e) => e.stopPropagation();
+// Menu Navigation
+const side = document.getElementById("side");
+document.getElementById("mBtn").onclick = (e) => { e.stopPropagation(); side.classList.toggle("open"); };
+document.body.onclick = () => side.classList.remove("open");
+side.onclick = (e) => e.stopPropagation();
 
-document.getElementById("goCounter").onclick = () => { pg("counterPage"); };
-document.getElementById("goLeader").onclick = () => { pg("leaderboardPage"); };
+document.getElementById("goCounter").onclick = () => pg("counterPage");
+document.getElementById("goLeader").onclick = () => pg("leaderboardPage");
 
 function pg(id) {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     document.getElementById(id).classList.add("active");
-    document.getElementById("side").classList.remove("open");
+    side.classList.remove("open");
 }
 
-// Login
+// Auth Login
 document.getElementById("loginBtn").onclick = () => {
     auth.signInWithPopup(provider).then(res => {
         uId = res.user.uid; uName = res.user.displayName;
@@ -81,10 +82,10 @@ document.getElementById("loginBtn").onclick = () => {
 };
 document.getElementById("gLoginBtn").onclick = () => {
     let name = document.getElementById("gName").value;
-    if(name.trim()) { localStorage.setItem("uName", name); location.reload(); }
+    if(name.trim()) { localStorage.setItem("uName", name); localStorage.setItem("uId", uId); location.reload(); }
 };
 
-// Leaderboard
+// Leaderboard Sync
 db.collection("JapData").orderBy("total", "desc").limit(10).onSnapshot(snap => {
     let html = "";
     snap.forEach(doc => {
@@ -99,5 +100,17 @@ if(localStorage.getItem("uName")) {
     document.getElementById("wMsg").style.display = "block";
     document.getElementById("wMsg").innerText = "जय श्री राम, " + uName;
 }
+
+document.getElementById("shareB").onclick = () => {
+    const txt = `🚩 जय श्री राम! मैंने अब तक ${total} जप किये हैं। आप भी Ritik Tiwari के ऐप पर जुड़ें: ${window.location.href}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`);
+};
+
+document.getElementById("muteB").onclick = () => {
+    isMuted = !isMuted;
+    document.getElementById("muteB").innerHTML = isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
+};
+
+document.getElementById("rBtn").onclick = () => { if(confirm("Sab reset karein?")) { localStorage.clear(); location.reload(); }};
 
 upUI();
