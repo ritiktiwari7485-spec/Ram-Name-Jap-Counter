@@ -13,14 +13,22 @@
 
     <header class="glass-header">
         <button id="menuBtn"><i class="fas fa-bars"></i></button>
-        <h1>🕉️ श्री राम</h1>
-        <div style="display: flex; gap: 15px;">
-            <button id="bgMusicBtn" title="Play Flute Music"><i class="fas fa-music"></i></button>
-            <button id="soundToggle" title="Ram Ram Voice"><i class="fas fa-volume-up"></i></button>
+        <h1 style="font-family: 'Yatra One', cursive; color: #ff9900;">🕉️ श्री राम</h1>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <img id="userPhoto" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width: 30px; height: 30px; border-radius: 50%; display: none; border: 1px solid gold;">
+            <button id="bgMusicBtn"><i class="fas fa-music"></i></button>
+            <button id="soundToggle"><i class="fas fa-volume-up"></i></button>
         </div>
     </header>
 
     <nav class="sidebar glass-panel" id="menu">
+        <div id="authSection" style="padding: 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <button id="loginBtn" style="background: white; color: #444; border: none; padding: 10px 15px; border-radius: 5px; font-weight: bold; cursor: pointer; width: 100%;">
+                <img src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" style="width: 15px; vertical-align: middle; margin-right: 10px;"> Sign in with Google
+            </button>
+            <p id="welcomeText" style="display: none; font-size: 14px; margin-top: 10px;">जय श्री राम, <span id="displayName"></span>!</p>
+        </div>
+
         <button data-page="counter"><i class="fas fa-om"></i> Jap Counter</button>
         <button data-page="stats"><i class="fas fa-chart-bar"></i> Stats</button>
         <button data-page="leaderboard"><i class="fas fa-trophy"></i> Live Leaderboard</button>
@@ -33,12 +41,8 @@
                 <div class="mala" id="mala"></div>
                 <button class="jap-btn" id="japBtn">राम</button>
             </div>
-            
-            <div class="progress-container">
-                <div class="progress-bar" id="bar"></div>
-            </div>
+            <div class="progress-container"><div class="progress-bar" id="bar"></div></div>
             <p class="mala-count">Mala Completed: <span id="malaCount">0</span></p>
-
             <div class="statsBox">
                 <div class="stat-item"><span>Today</span><strong id="today">0</strong></div>
                 <div class="stat-item"><span>Total</span><strong id="total">0</strong></div>
@@ -47,14 +51,8 @@
 
         <section id="statsPage" class="page glass-panel">
             <h2>📊 Your Devotion</h2>
-            <div class="big-stat">
-                <p>Lifetime Jap</p>
-                <h1 id="totalStat" style="color: gold;">0</h1>
-            </div>
-            <div class="big-stat">
-                <p>Today's Jap</p>
-                <h2 id="todayStat" style="color: #ff7b00;">0</h2>
-            </div>
+            <div class="big-stat"><p>Lifetime Jap</p><h1 id="totalStat" style="color: gold;">0</h1></div>
+            <div class="big-stat"><p>Today's Jap</p><h2 id="todayStat" style="color: #ff7b00;">0</h2></div>
         </section>
 
         <section id="leaderboardPage" class="page glass-panel">
@@ -62,25 +60,17 @@
                 <p>🌍 Global Maha-Jap</p>
                 <h1 id="globalTotal" style="color: #00ff88; font-size: 32px;">0+</h1>
             </div>
-
-            <h2>🏆 Live Top 10</h2>
-            <div id="leaderboardList" style="text-align: left; max-height: 250px; overflow-y: auto;">
-                <p>Loading Live Data... ⏳</p>
-            </div>
+            <h2>🏆 Top 10 Devotees</h2>
+            <div id="leaderboardList" style="text-align: left; max-height: 250px; overflow-y: auto;"></div>
         </section>
     </main>
 
-    <footer class="glass-footer">
-        Created with ❤️ by Ritik Tiwari | 📺 @ekanokhasafar
-    </footer>
+    <footer class="glass-footer">Created with ❤️ by Ritik Tiwari | 📺 @ekanokhasafar</footer>
 
-    <audio id="bgMusicPlayer" loop src="https://www.chosic.com/wp-content/uploads/2021/07/The-Epic-Hero-Epic-Cinematic-Keys-of-Moon-Music.mp3"></audio>
-
-        <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore-compat.js"></script>
-    
+    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-auth-compat.js"></script>
     <script src="firebase-config.js"></script>
-
     <script src="app.js"></script>
 </body>
 </html>
