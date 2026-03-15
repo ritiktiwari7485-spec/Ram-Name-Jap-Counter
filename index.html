@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Ram Jap Pro</title>
+    <title>Ram Jap Counter</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -11,10 +11,8 @@
 <body>
     <header class="glass-header">
         <button id="menuBtn" style="background:none; border:none; color:white; font-size:20px;"><i class="fas fa-bars"></i></button>
-        <div style="text-align:center;">
-            <h1 id="mainTitle" style="font-family: 'Yatra One', cursive; color: var(--primary); font-size: 20px;">श्री राम</h1>
-        </div>
-        <div style="display: flex; gap: 15px;">
+        <h1 id="mainTitle" style="font-family: 'Yatra One', cursive; color: var(--primary); font-size: 20px;">श्री राम</h1>
+        <div style="display: flex; gap: 15px; align-items: center;">
             <button id="muteBtn" style="background:none; border:none; color:white;"><i class="fas fa-volume-up"></i></button>
             <img id="userPhoto" src="" style="width: 32px; height: 32px; border-radius: 50%; display: none; border: 2px solid gold;">
         </div>
@@ -23,25 +21,24 @@
     <nav class="sidebar" id="menu">
         <div id="authSection" style="padding: 20px; text-align: center;">
             <div id="loginOptions">
-                <button id="loginBtn" style="background:white; padding:10px; border-radius:8px; width:100%; font-weight:bold; margin-bottom:10px;">Google Login</button>
-                <input type="text" id="guestNameInput" placeholder="अपना नाम" style="width:100%; padding:10px; border-radius:8px; margin-bottom:10px;">
+                <button id="loginBtn" style="background:white; padding:10px; border-radius:8px; width:100%; font-weight:bold; margin-bottom:10px; border:none;">Google Login</button>
+                <input type="text" id="guestNameInput" placeholder="अपना नाम" style="width:100%; padding:10px; border-radius:8px; margin-bottom:10px; border:none;">
                 <button id="guestLoginBtn" style="background:var(--primary); color:white; width:100%; padding:10px; border-radius:8px; border:none;">प्रवेश करें</button>
             </div>
-            <div id="welcomeText" style="display:none; color:gold;">जय श्री राम, <span id="displayName"></span>!</div>
+            <div id="welcomeText" style="display:none; color:gold;">जय श्री राम!</div>
         </div>
         <button id="navCounter"><i class="fas fa-om"></i> Jap Counter</button>
-        <button id="navLeader"><i class="fas fa-trophy"></i> Leaderboard</button>
-        <button id="bgMusicBtn"><i class="fas fa-music"></i> Flute Music</button>
+        <button id="navLeaderboard"><i class="fas fa-trophy"></i> Leaderboard</button>
         <button id="shareBtn"><i class="fab fa-whatsapp"></i> Share App</button>
-        <button id="resetBtn" style="color:red;"><i class="fas fa-trash"></i> Reset All</button>
+        <button id="resetBtn" style="color:#ff4444;"><i class="fas fa-trash"></i> Reset All Data</button>
     </nav>
 
     <main>
         <section id="counterPage" class="page active glass-panel">
-            <div class="mantra-slider">
-                <div class="mantra-chip active" data-m="श्री राम">श्री राम</div>
-                <div class="mantra-chip" data-m="ॐ नमः शिवाय">ॐ नमः शिवाय</div>
-                <div class="mantra-chip" data-m="राधे कृष्ण">राधे कृष्ण</div>
+            <div class="mantra-slider" id="mantraSlider">
+                <div class="mantra-chip active" onclick="setMantra('श्री राम', this)">श्री राम</div>
+                <div class="mantra-chip" onclick="setMantra('ॐ नमः शिवाय', this)">ॐ नमः शिवाय</div>
+                <div class="mantra-chip" onclick="setMantra('राधे कृष्ण', this)">राधे कृष्ण</div>
             </div>
             <div class="mala-container">
                 <div class="mala" id="mala"></div>
@@ -60,8 +57,8 @@
         </section>
 
         <section id="leaderboardPage" class="page glass-panel">
-            <h2>🏆 Top Bhakt</h2>
-            <div id="leaderboardList" style="margin-top:15px;"></div>
+            <h2>🏆 Global Leaderboard</h2>
+            <div id="leaderboardList" style="margin-top:20px;"></div>
         </section>
     </main>
 
