@@ -9,7 +9,7 @@ let today = parseInt(localStorage.getItem("today")) || 0;
 let isMuted = false;
 let curV = "राम";
 
-// Mala Initialization
+// Mala setup
 const mala = document.getElementById("mala");
 const beads = [];
 for(let i=0; i<108; i++) {
@@ -27,10 +27,15 @@ function upUI() {
     document.getElementById("mc").innerText = Math.floor(total/108);
     let curr = total % 108;
     beads.forEach((b, i) => { b.classList.remove("active"); if(i < curr) b.classList.add("active"); });
+    
+    // Achievements
+    if(total >= 108) document.getElementById("b1").classList.add("unlocked");
+    if(total >= 1008) document.getElementById("b2").classList.add("unlocked");
+    if(total >= 5000) document.getElementById("b3").classList.add("unlocked");
+    
     localStorage.setItem("total", total);
 }
 
-// Jap Logic
 document.getElementById("jBtn").onclick = () => {
     total++; today++;
     if(!isMuted) {
@@ -41,18 +46,7 @@ document.getElementById("jBtn").onclick = () => {
     }
     if(total % 108 === 0) confetti();
     upUI();
-    saveToCloud();
-};
-
-function saveToCloud() {
     db.collection("JapData").doc(uId).set({ name: uName, total: total }, {merge:true});
-}
-
-// Navigation & Mantra
-window.pg = (id) => {
-    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    document.getElementById("side").classList.remove("open");
 };
 
 window.stM = (m, v, el) => {
@@ -63,12 +57,21 @@ window.stM = (m, v, el) => {
     curV = v;
 };
 
-// Menu Logic
+// Menu & Pages
 document.getElementById("mBtn").onclick = (e) => { e.stopPropagation(); document.getElementById("side").classList.add("open"); };
 document.body.onclick = () => document.getElementById("side").classList.remove("open");
 document.getElementById("side").onclick = (e) => e.stopPropagation();
 
-// Login Logic
+document.getElementById("goCounter").onclick = () => { pg("counterPage"); };
+document.getElementById("goLeader").onclick = () => { pg("leaderboardPage"); };
+
+function pg(id) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    document.getElementById("side").classList.remove("open");
+}
+
+// Login
 document.getElementById("loginBtn").onclick = () => {
     auth.signInWithPopup(provider).then(res => {
         uId = res.user.uid; uName = res.user.displayName;
@@ -76,16 +79,12 @@ document.getElementById("loginBtn").onclick = () => {
         location.reload();
     });
 };
-
 document.getElementById("gLoginBtn").onclick = () => {
     let name = document.getElementById("gName").value;
-    if(name.trim()) {
-        uName = name; localStorage.setItem("uName", uName); localStorage.setItem("uId", uId);
-        location.reload();
-    }
+    if(name.trim()) { localStorage.setItem("uName", name); location.reload(); }
 };
 
-// Leaderboard Logic
+// Leaderboard
 db.collection("JapData").orderBy("total", "desc").limit(10).onSnapshot(snap => {
     let html = "";
     snap.forEach(doc => {
@@ -100,10 +99,5 @@ if(localStorage.getItem("uName")) {
     document.getElementById("wMsg").style.display = "block";
     document.getElementById("wMsg").innerText = "जय श्री राम, " + uName;
 }
-
-document.getElementById("shareB").onclick = () => {
-    const txt = `🚩 जय श्री राम! मैंने अब तक ${total} जप किये हैं। आप भी जुड़ें: ${window.location.href}`;
-    window.open(`https://wa.me/?text=${encodeURIComponent(txt)}`);
-};
 
 upUI();
