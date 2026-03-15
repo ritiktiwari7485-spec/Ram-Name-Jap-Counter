@@ -4,13 +4,12 @@ const provider = new firebase.auth.GoogleAuthProvider();
 
 let userId = localStorage.getItem("userId") || "guest_" + Math.random().toString(36).substr(2, 9);
 let userName = localStorage.getItem("userName") || "Ram Bhakt";
-let userPhoto = localStorage.getItem("userPhoto") || "";
 let total = parseInt(localStorage.getItem("total")) || 0;
 let today = parseInt(localStorage.getItem("today")) || 0;
 let isMuted = localStorage.getItem("isMuted") === "true";
-let currentMantra = "राम"; // Default sound
+let currentVoiceText = "राम";
 
-// --- Mala beads generation ---
+// Mala Setup
 const mala = document.getElementById("mala");
 const beads = [];
 for(let i=0; i<108; i++) {
@@ -23,15 +22,13 @@ for(let i=0; i<108; i++) {
     beads.push(b);
 }
 
-// --- Smart Voice Logic (Text to Speech) ---
-function speakMantra(text) {
+function speak(text) {
     if (isMuted) return;
-    window.speechSynthesis.cancel(); // Purani voice roko
-    let utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'hi-IN'; // Hindi voice
-    utterance.rate = 1.2;     // Thoda fast taki jap natural lage
-    utterance.pitch = 1.0;
-    window.speechSynthesis.speak(utterance);
+    window.speechSynthesis.cancel();
+    let msg = new SpeechSynthesisUtterance(text);
+    msg.lang = 'hi-IN';
+    msg.rate = 1.3;
+    window.speechSynthesis.speak(msg);
 }
 
 function updateUI() {
@@ -43,61 +40,66 @@ function updateUI() {
         b.classList.remove("active");
         if(i < curr) b.classList.add("active");
     });
-    
-    // Badges unlocking logic
-    if(total >= 108) document.getElementById("b1").classList.add("unlocked");
-    if(total >= 1008) document.getElementById("b2").classList.add("unlocked");
-    if(total >= 5000) document.getElementById("b3").classList.add("unlocked");
-    
     localStorage.setItem("total", total);
     localStorage.setItem("today", today);
 }
 
-// --- Click Event ---
+// Button Events
 document.getElementById("japBtn").onclick = () => {
     total++; today++;
-    
-    // Smart Sound
-    speakMantra(currentMantra);
-    
+    speak(currentVoiceText);
     if(navigator.vibrate) navigator.vibrate(50);
-    if(total % 108 === 0) {
-        confetti({ particleCount: 150, spread: 70 });
-        // Temple Bell on completion
-        let bell = new Audio("https://www.soundjay.com/misc/sounds/bell-ringing-01.mp3");
-        if(!isMuted) bell.play().catch(()=>{});
-    }
+    if(total % 108 === 0) confetti({ particleCount: 150, spread: 70 });
     updateUI();
-    db.collection("JapData").doc(userId).set({ name: userName, photo: userPhoto, total: total }, {merge:true});
+    db.collection("JapData").doc(userId).set({ name: userName, total: total }, {merge:true});
 };
 
-// --- Mantra Selector Logic ---
-window.setMantra = function(m, el) {
+window.updateMantra = function(m, el) {
     document.querySelectorAll(".mantra-chip").forEach(c => c.classList.remove("active"));
     el.classList.add("active");
     document.getElementById("mainTitle").innerText = m;
-    
-    // Yahan hum voice ke liye mantra set kar rahe hain
-    if(m === "श्री राम") currentMantra = "राम";
-    else if(m === "ॐ नमः शिवाय") currentMantra = "नमः शिवाय";
-    else if(m === "राधे कृष्ण") currentMantra = "राधे कृष्ण";
-    
-    document.getElementById("japBtn").innerText = currentMantra.split(" ").pop();
+    currentVoiceText = m === "श्री राम" ? "राम" : (m === "ॐ नमः शिवाय" ? "नमः शिवाय" : "राधे कृष्ण");
+    document.getElementById("japBtn").innerText = currentVoiceText.split(" ").pop();
 };
 
-// --- Other Buttons ---
-document.getElementById("muteBtn").onclick = () => {
-    isMuted = !isMuted;
-    localStorage.setItem("isMuted", isMuted);
-    document.getElementById("muteBtn").innerHTML = isMuted ? '<i class="fas fa-volume-mute"></i>' : '<i class="fas fa-volume-up"></i>';
-};
-
-document.getElementById("menuBtn").onclick = (e) => { 
-    e.stopPropagation(); 
-    document.getElementById("menu").classList.toggle("open"); 
+document.getElementById("menuBtn").onclick = (e) => {
+    e.stopPropagation();
+    document.getElementById("menu").classList.toggle("open");
 };
 
 document.body.onclick = () => document.getElementById("menu").classList.remove("open");
 
-// Initial Load
+document.getElementById("navCounter").onclick = () => {
+    document.getElementById("counterPage").classList.add("active");
+    document.getElementById("leaderboardPage").classList.remove("active");
+};
+
+document.getElementById("navLeaderboard").onclick = () => {
+    document.getElementById("leaderboardPage").classList.add("active");
+    document.getElementById("counterPage").classList.remove("active");
+};
+
+// Login Logic
+document.getElementById("loginBtn").onclick = () => {
+    auth.signInWithPopup(provider).then(res => {
+        localStorage.setItem("userId", res.user.uid);
+        localStorage.setItem("userName", res.user.displayName);
+        location.reload();
+    }).catch(err => alert("Login Error: " + err.message));
+};
+
+document.getElementById("guestLoginBtn").onclick = () => {
+    let n = document.getElementById("guestNameInput").value;
+    if(n.trim()) {
+        localStorage.setItem("userName", n);
+        location.reload();
+    }
+};
+
+if(localStorage.getItem("userName") && !userId.startsWith("guest_")) {
+    document.getElementById("loginOptions").style.display = "none";
+    document.getElementById("welcomeText").style.display = "block";
+    document.getElementById("welcomeText").innerText = "जय श्री राम, " + localStorage.getItem("userName");
+}
+
 updateUI();
