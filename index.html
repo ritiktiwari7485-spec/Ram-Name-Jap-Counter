@@ -2,8 +2,8 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-    <title>Ram Jap - Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Ram Jap Pro</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
@@ -13,79 +13,55 @@
         <button id="menuBtn" style="background:none; border:none; color:white; font-size:20px;"><i class="fas fa-bars"></i></button>
         <div style="text-align:center;">
             <h1 id="mainTitle" style="font-family: 'Yatra One', cursive; color: var(--primary); font-size: 20px;">श्री राम</h1>
-            <div style="font-size:10px; color:#ff4444; font-weight:bold;"><i class="fas fa-fire"></i> <span id="streakCount">1</span> Day Streak</div>
         </div>
-        <div style="display: flex; gap: 15px; align-items:center;">
+        <div style="display: flex; gap: 15px;">
             <button id="muteBtn" style="background:none; border:none; color:white;"><i class="fas fa-volume-up"></i></button>
             <img id="userPhoto" src="" style="width: 32px; height: 32px; border-radius: 50%; display: none; border: 2px solid gold;">
         </div>
     </header>
 
     <nav class="sidebar" id="menu">
-        <div id="authSection" style="padding: 30px 20px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
+        <div id="authSection" style="padding: 20px; text-align: center;">
             <div id="loginOptions">
-                <button id="loginBtn" style="background:white; color:black; border:none; padding:12px; border-radius:10px; width:100%; font-weight:bold; margin-bottom:15px;">Google Login</button>
-                <input type="text" id="guestNameInput" placeholder="अपना नाम लिखें" style="width:100%; padding:12px; border-radius:10px; border:none; margin-bottom:10px; background:rgba(255,255,255,0.1); color:white;">
-                <button id="guestLoginBtn" style="background:var(--primary); color:white; border:none; padding:12px; border-radius:10px; width:100%; font-weight:bold;">प्रवेश करें</button>
+                <button id="loginBtn" style="background:white; padding:10px; border-radius:8px; width:100%; font-weight:bold; margin-bottom:10px;">Google Login</button>
+                <input type="text" id="guestNameInput" placeholder="अपना नाम" style="width:100%; padding:10px; border-radius:8px; margin-bottom:10px;">
+                <button id="guestLoginBtn" style="background:var(--primary); color:white; width:100%; padding:10px; border-radius:8px; border:none;">प्रवेश करें</button>
             </div>
-            <div id="welcomeText" style="display:none;">
-                <p style="color:gold; font-size:16px; font-weight:bold;">जय श्री राम!</p>
-                <p id="displayName" style="margin-bottom:5px;"></p>
-                <span id="rankBadge" style="font-size:10px; background:gold; color:black; padding:2px 8px; border-radius:10px; font-weight:bold;">Shravak</span>
-            </div>
+            <div id="welcomeText" style="display:none; color:gold;">जय श्री राम, <span id="displayName"></span>!</div>
         </div>
-        <button onclick="showPage('counterPage')"><i class="fas fa-om"></i> Jap Counter</button>
-        <button onclick="showPage('leaderboardPage')"><i class="fas fa-trophy"></i> Leaderboard</button>
+        <button id="navCounter"><i class="fas fa-om"></i> Jap Counter</button>
+        <button id="navLeader"><i class="fas fa-trophy"></i> Leaderboard</button>
         <button id="bgMusicBtn"><i class="fas fa-music"></i> Flute Music</button>
-        <div style="padding:20px;">
-            <p style="font-size:11px; opacity:0.6; margin-bottom:10px;">Themes:</p>
-            <div style="display:flex; gap:12px;">
-                <div onclick="setTheme('classic')" style="background:#ff9900; width:30px; height:30px; border-radius:50%; border:2px solid white; cursor:pointer;"></div>
-                <div onclick="setTheme('blue')" style="background:#e94560; width:30px; height:30px; border-radius:50%; cursor:pointer;"></div>
-                <div onclick="setTheme('gold')" style="background:#ffd700; width:30px; height:30px; border-radius:50%; cursor:pointer;"></div>
-            </div>
-        </div>
-        <button id="shareBtn"><i class="fab fa-whatsapp"></i> WhatsApp Share</button>
-        <button id="resetBtn" style="color:#ff4444;"><i class="fas fa-trash-alt"></i> Reset All Data</button>
+        <button id="shareBtn"><i class="fab fa-whatsapp"></i> Share App</button>
+        <button id="resetBtn" style="color:red;"><i class="fas fa-trash"></i> Reset All</button>
     </nav>
 
     <main>
-        <section id="counterPage" class="page active">
-            <div class="glass-panel">
-                <div class="mantra-slider">
-                    <div class="mantra-chip active" onclick="changeMantra('श्री राम', this)">श्री राम</div>
-                    <div class="mantra-chip" onclick="changeMantra('ॐ नमः शिवाय', this)">ॐ नमः शिवाय</div>
-                    <div class="mantra-chip" onclick="changeMantra('राधे कृष्ण', this)">राधे कृष्ण</div>
-                    <div class="mantra-chip" onclick="changeMantra('ॐ नमो भगवते', this)">ॐ नमो भगवते</div>
-                </div>
-                <div class="mala-container">
-                    <div class="mala" id="mala"></div>
-                    <button class="jap-btn" id="japBtn">राम</button>
-                </div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;">
-                    <div class="stat-card"><span>आज</span><h3 id="today">0</h3></div>
-                    <div class="stat-card"><span>माला</span><h3 id="malaCount">0</h3></div>
-                    <div class="stat-card"><span>कुल</span><h3 id="total">0</h3></div>
-                </div>
+        <section id="counterPage" class="page active glass-panel">
+            <div class="mantra-slider">
+                <div class="mantra-chip active" data-m="श्री राम">श्री राम</div>
+                <div class="mantra-chip" data-m="ॐ नमः शिवाय">ॐ नमः शिवाय</div>
+                <div class="mantra-chip" data-m="राधे कृष्ण">राधे कृष्ण</div>
             </div>
-            <div class="glass-panel">
-                <p style="font-size:12px; color:#aaa; margin-bottom:10px;">🎖️ Unlocked Badges</p>
-                <div class="badge-grid">
-                    <span class="badge-item" id="b1">Karmyogi (108)</span>
-                    <span class="badge-item" id="b2">Sadhak (1008)</span>
-                    <span class="badge-item" id="b3">Bhakt (5000)</span>
-                    <span class="badge-item" id="b4">Param Bhakt (10000)</span>
-                </div>
+            <div class="mala-container">
+                <div class="mala" id="mala"></div>
+                <button class="jap-btn" id="japBtn">राम</button>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;">
+                <div class="stat-card"><span>Today</span><h3 id="today">0</h3></div>
+                <div class="stat-card"><span>Mala</span><h3 id="malaCount">0</h3></div>
+                <div class="stat-card"><span>Total</span><h3 id="total">0</h3></div>
+            </div>
+            <div class="badge-grid">
+                <span class="badge-item" id="b1">Karmyogi</span>
+                <span class="badge-item" id="b2">Sadhak</span>
+                <span class="badge-item" id="b3">Bhakt</span>
             </div>
         </section>
 
         <section id="leaderboardPage" class="page glass-panel">
-            <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:20px; margin-bottom:15px;">
-                <p style="font-size:14px; opacity:0.7;">🚩 Global Maha-Jap</p>
-                <h1 id="globalTotal" style="color:#00ff88; font-size:35px;">0</h1>
-            </div>
-            <div id="myRankDisplay" style="color:gold; font-weight:bold; margin-bottom:15px;">Rank: #...</div>
-            <div id="leaderboardList"></div>
+            <h2>🏆 Top Bhakt</h2>
+            <div id="leaderboardList" style="margin-top:15px;"></div>
         </section>
     </main>
 
