@@ -9,26 +9,25 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-    <div class="bg-animation"></div>
-
     <header class="glass-header">
         <button id="menuBtn"><i class="fas fa-bars"></i></button>
         <h1 style="font-family: 'Yatra One', cursive; color: #ff9900;">🕉️ श्री राम</h1>
-        <div style="display: flex; gap: 10px; align-items: center;">
-            <img id="userPhoto" src="" style="width: 32px; height: 32px; border-radius: 50%; display: none; border: 2px solid gold;">
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <button id="soundToggle"><i class="fas fa-volume-up"></i></button>
             <button id="bgMusicBtn"><i class="fas fa-music"></i></button>
+            <img id="userPhoto" src="" style="width: 32px; height: 32px; border-radius: 50%; display: none; border: 2px solid gold;">
         </div>
     </header>
 
     <nav class="sidebar glass-panel" id="menu">
         <div id="authSection" style="padding: 10px; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1);">
             <div id="loginOptions">
-                <button id="loginBtn" style="background:white; color:black; border:none; padding:8px; border-radius:5px; width:100%; font-weight:bold; margin-bottom:10px;">Google Login</button>
-                <input type="text" id="guestNameInput" placeholder="अपना नाम लिखें" style="width:100%; padding:8px; border-radius:5px; border:none; margin-bottom:5px; background:rgba(255,255,255,0.1); color:white;">
-                <button id="guestLoginBtn" style="background:#ff9900; color:white; border:none; padding:8px; border-radius:5px; width:100%;">प्रवेश करें</button>
+                <button id="loginBtn" style="background:white; color:black; border:none; padding:10px; border-radius:8px; width:100%; font-weight:bold; margin-bottom:12px;">Google Login</button>
+                <input type="text" id="guestNameInput" placeholder="अपना नाम लिखें" style="width:100%; padding:10px; border-radius:8px; border:none; margin-bottom:8px; background:rgba(255,255,255,0.1); color:white;">
+                <button id="guestLoginBtn" style="background:#ff9900; color:white; border:none; padding:10px; border-radius:8px; width:100%; font-weight:bold;">प्रवेश करें</button>
             </div>
             <div id="welcomeText" style="display:none;">
-                <p style="color:gold;">जय श्री राम, <span id="displayName"></span>!</p>
+                <p style="color:gold; font-weight:bold;">जय श्री राम, <span id="displayName"></span>!</p>
                 <span id="userBadge" class="badge">Shravak</span>
             </div>
         </div>
@@ -37,52 +36,60 @@
         <button data-page="leaderboard"><i class="fas fa-trophy"></i> Leaderboard</button>
         
         <div style="padding:15px; border-top:1px solid rgba(255,255,255,0.1);">
-            <p style="font-size:12px; margin-bottom:10px;">Choose Theme:</p>
-            <div style="display:flex; gap:10px;">
-                <div class="theme-dot" onclick="setTheme('classic')" style="background:#ff9900; width:25px; height:25px; border-radius:50%; border:2px solid white;"></div>
-                <div class="theme-dot" onclick="setTheme('blue')" style="background:#e94560; width:25px; height:25px; border-radius:50%;"></div>
-                <div class="theme-dot" onclick="setTheme('gold')" style="background:#ffd700; width:25px; height:25px; border-radius:50%;"></div>
+            <p style="font-size:12px; margin-bottom:10px;">थीम बदलें:</p>
+            <div style="display:flex; gap:15px; justify-content:center;">
+                <div onclick="setTheme('classic')" style="background:#ff9900; width:30px; height:30px; border-radius:50%; border:2px solid white;"></div>
+                <div onclick="setTheme('blue')" style="background:#e94560; width:30px; height:30px; border-radius:50%;"></div>
+                <div onclick="setTheme('gold')" style="background:#ffd700; width:30px; height:30px; border-radius:50%;"></div>
             </div>
         </div>
 
         <button id="shareBtn"><i class="fab fa-whatsapp"></i> WhatsApp Share</button>
-        <button id="resetBtn" style="color:#ff4444;"><i class="fas fa-trash"></i> Reset Data</button>
+        <button id="resetBtn" style="color:#ff4444;"><i class="fas fa-trash-alt"></i> Reset All Data</button>
     </nav>
 
-    <main class="main">
+    <main>
         <section id="counterPage" class="page active glass-panel">
-            <div id="chaupaiBox" style="font-style:italic; font-size:13px; color:#ffcc00; margin-bottom:15px; min-height:40px;">
-                "मंगल भवन अमंगल हारी, द्रवहु सुदसरथ अजिर बिहारी"
+            <div id="chaupaiBox" style="font-style:italic; font-size:14px; color:#ffcc00; margin-bottom:20px;">
+                "श्री राम जय राम जय जय राम"
             </div>
 
-            <div class="live-status"><i class="fas fa-circle" style="color:#00ff88; font-size:8px;"></i> <span id="liveUsers">108</span> Bhakt Online</div>
+            <div class="live-status"><i class="fas fa-circle" style="color:#00ff88; font-size:8px; animation:blink 1.5s infinite;"></i> <span id="liveUsers">...</span> Bhakt Online</div>
             
             <div class="mala-container">
                 <div class="mala" id="mala"></div>
                 <button class="jap-btn" id="japBtn">राम</button>
             </div>
 
-            <div class="stats-grid">
+            <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px;">
                 <div class="stat-card"><span>आज का जप</span><h3 id="today">0</h3></div>
                 <div class="stat-card"><span>माला</span><h3 id="malaCount">0</h3></div>
                 <div class="stat-card"><span>कुल जप</span><h3 id="total">0</h3></div>
             </div>
-            <div class="progress-container" style="margin-top:20px; height:6px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden;">
-                <div class="progress-bar" id="bar" style="height:100%; background:var(--primary); width:0%; transition:0.3s;"></div>
+            
+            <div style="margin-top:25px;">
+                <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:5px;">
+                    <span>Mala Progress</span>
+                    <span id="percentLabel">0%</span>
+                </div>
+                <div style="height:8px; background:rgba(255,255,255,0.1); border-radius:10px; overflow:hidden;">
+                    <div id="bar" style="height:100%; background:var(--primary); width:0%; transition:0.3s;"></div>
+                </div>
             </div>
         </section>
 
         <section id="leaderboardPage" class="page glass-panel">
-            <div class="global-card" style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px;">
-                <p>🚩 Global Maha-Jap Counter</p>
-                <h1 id="globalTotal" style="color:#00ff88; font-size:36px;">0</h1>
+            <div style="background:rgba(0,0,0,0.3); padding:20px; border-radius:20px; margin-bottom:20px;">
+                <p style="font-size:14px;">🚩 Global Maha-Jap Counter</p>
+                <h1 id="globalTotal" style="color:#00ff88; font-size:40px;">0</h1>
             </div>
-            <h3>🏆 Top 10 Bhakt</h3>
-            <div id="leaderboardList" style="margin-top:15px;"></div>
+            <div id="myRankBox" style="font-size:14px; color:gold; margin-bottom:15px; font-weight:bold;"></div>
+            <h3 style="margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">🏆 Top 10 Ram Bhakt</h3>
+            <div id="leaderboardList"></div>
         </section>
     </main>
 
-    <footer style="text-align:center; font-size:10px; opacity:0.6; padding:10px;">Created by Ritik Tiwari | @ekanokhasafar</footer>
+    <footer style="text-align:center; font-size:11px; opacity:0.5; padding:20px;">Developed with Devotion by Ritik Tiwari</footer>
 
     <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore-compat.js"></script>
